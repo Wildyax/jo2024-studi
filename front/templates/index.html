@@ -1,0 +1,96 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block title %}Page d'accueil{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/index.js' %}"></script>
+{% endblock js %}
+
+{% block body %}
+<div class="container home-container">
+    <div class="intro">
+        <h1>Bienvenue sur le site des jeux olympiques 2024 !</h1>
+        <div class="intro-content">
+            <img src="{% static 'img/paris-2024.jpg' %}" alt="Image des JO de paris 2024">
+            <p>Du 26 juillet au 11 août 2024, la France accueillera le monde entier pour célébrer le plus grand événement sportif de la planète. 
+                Plus de 10 000 athlètes, venus de plus de 200 pays, s'affronteront dans un esprit de paix, de respect et d'excellence.</p>
+        </div>
+    </div>
+
+    <div class="discipline">
+        <h2>Les épreuves</h2>
+        <p>C'est la troisième fois que Paris organise les Jeux Olympiques, après 1900 et 1924. 
+            Un siècle plus tard, la capitale est prête à offrir un spectacle inoubliable.
+            Voici un aperçu de certaines disciplines phares à suivre :
+        </p>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+
+            <div class="col">
+                <div class="card">
+                  <img src="{% static 'img/epreuves/athletisme.jpg' %}" class="card-img-top" alt="Image de l'épreuve d'athletisme">
+                  <div class="card-body">
+                    <h5 class="card-title">Athlétisme</h5>
+                    <p class="card-text">Le cœur des JO, avec les courses, les sauts et les lancers. Frissons garantis sur le 100m !</p>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                  <img src="{% static 'img/epreuves/natation.jpg' %}" class="card-img-top" alt="Image de l'épreuve de natation">
+                  <div class="card-body">
+                    <h5 class="card-title">Natation</h5>
+                    <p class="card-text">Des courses spectaculaires dans l'eau avec les meilleurs nageurs du monde.</p>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                  <img src="{% static 'img/epreuves/gymnastique.jpg' %}" class="card-img-top" alt="Image de l'épreuve de gymnastique">
+                  <div class="card-body">
+                    <h5 class="card-title">Gymnastique</h5>
+                    <p class="card-text">Équilibre, force et grâce… un concentré de performance.</p>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                  <img src="{% static 'img/epreuves/aviron.jpg' %}" class="card-img-top" alt="Image de l'épreuve d'aviron">
+                  <div class="card-body">
+                    <h5 class="card-title">Aviron</h5>
+                    <p class="card-text">Des courses d'endurance sur l'eau qui exigent force et coordination.</p>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                  <img src="{% static 'img/epreuves/escrime.jpg' %}" class="card-img-top" alt="Image de l'épreuve d'escrime">
+                  <div class="card-body">
+                    <h5 class="card-title">Escrime</h5>
+                    <p class="card-text">Un sport de tradition française, alliant rapidité et précision.</p>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                  <img src="{% static 'img/epreuves/judo.jpg' %}" class="card-img-top" alt="Image de l'épreuve de judo">
+                  <div class="card-body">
+                    <h5 class="card-title">Judo</h5>
+                    <p class="card-text">Discipline très populaire en France, avec souvent de belles médailles tricolores à la clé.</p>
+                  </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock body %}
