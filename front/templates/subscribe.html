@@ -1,0 +1,101 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block title %}Page d'accueil{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/subscribe.css' %}">
+{% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/index.js' %}"></script>
+{% endblock js %}
+
+{% block body %}
+
+<div class="container subscribe-container">
+    <ul class="nav nav-underline" id="tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if form_name == "" or form_name == "subscribe" %}active{% endif %}" id="subscribe-tab" data-bs-toggle="tab" data-bs-target="#subscribe-tab-pane" type="button" role="tab" aria-controls="subscribe-tab-pane" aria-selected="true">Inscription</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if form_name == "login" %}active{% endif %}" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-tab-pane" type="button" role="tab" aria-controls="login-tab-pane" aria-selected="false">Connexion</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="tabs-content">
+        <div class="tab-pane fade {% if form_name == "" or form_name == "subscribe" %}show active{% endif %}" id="subscribe-tab-pane" role="tabpanel" aria-labelledby="subscribe-tab" tabindex="0">
+            <div class="subscribe-form">
+                <form action="/subscribe" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="form-name" value="subscribe">
+                    {% for field in subscribe_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                            {{ field.label }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+                            </label>
+                    
+                            {{ field }}
+                    
+                            {% if field.help_text %}
+                            <div class="form-text">
+                                {{ field.help_text }}
+                            </div>
+                            {% endif %}
+                    
+                            {% for error in field.errors %}
+                            <div class="text-dange">
+                                {{ error }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="policy-checkbox" required>
+                        <label class="form-check-label" for="policy-checkbox">
+                            En vous inscrivant, vous reconnaissez avoir lu et accepté les <a href="#">CGV</a>
+                            ainsi que notre <a href="#">politique de confidentialité</a>.
+                        </label>
+                    </div>                    
+                    <div class="d-grid gap-2 col-6 mx-auto mt-5">
+                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane fade {% if form_name == "login" %}show active{% endif %}" id="login-tab-pane" role="tabpanel" aria-labelledby="login-tab" tabindex="0">
+            <div class="login-form">
+                <form action="/subscribe" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="form-name" value="login">
+                    {% for field in login_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                            {{ field.label }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+                            </label>
+                    
+                            {{ field }}
+                    
+                            {% if field.help_text %}
+                            <div class="form-text">
+                                {{ field.help_text }}
+                            </div>
+                            {% endif %}
+                    
+                            {% for error in field.errors %}
+                            <div class="text-danger">
+                                {{ error }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <div class="d-grid gap-2 col-6 mx-auto mt-5">
+                        <button type="submit" class="btn btn-primary">Connexion</button>
+                    </div>
+                  </form>
+            </div>
+        </div>
+    </div>
+      
+</div>
+
+{% endblock body %}
