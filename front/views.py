@@ -16,6 +16,9 @@ Route de la page d'inscription / connexion : /subscribe
 """
 def subscribe(request):
     
+    if request.user.is_authenticated:
+        return redirect('index')
+    
     subscribe_form = SubscribeForm()
     login_form = LoginForm()
     form_name = request.POST.get('form-name') if request.POST.get('form-name') else "" 
@@ -37,7 +40,7 @@ def subscribe(request):
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
             user = authenticate(request, email=login_form.cleaned_data["email"], password=login_form.cleaned_data["password"])
-            if user is not None:
+            if user is not None and not user.is_staff:
                 login(request, user)
                 return redirect("index")
             else:
