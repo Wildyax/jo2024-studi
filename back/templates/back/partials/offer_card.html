@@ -1,0 +1,15 @@
+<div class="col col-card" data-offer-id="{{ offer.id }}">
+    <div class="card offer-edit" style="width: 18rem;">
+        <div class="card-image">
+            <img src="{{ offer.image.url }}" class="card-img-top" alt="{{ offer.title }}">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ offer.title }}</h5>
+          <p class="card-text">{{ offer.description }}</p>
+        </div>
+        <div class="card-footer">
+          <a class="btn btn-outline-primary edit_btn" data-bs-toggle="modal" data-bs-target="#editOfferModal" data-offer-id="{{ offer.id }}">Modifier</a>
+          <a class="btn btn-outline-danger remove_btn" data-offer-id="{{ offer.id }}">Supprimer</a>
+        </div>
+    </div>
+</div>

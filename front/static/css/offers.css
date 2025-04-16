@@ -1,0 +1,32 @@
+.offers-container {
+    max-width: 960px;
+    
+    .intro {
+        margin: 20px 0 40px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .offers-list {
+        .card {
+            img {
+                height: 220px;
+                object-fit: cover;
+            }
+
+            .card-footer {
+                display: flex;
+                flex-direction: column;
+
+                .infos {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    margin: 0 0 14px 0;
+                }
+            }
+        }
+    }
+}

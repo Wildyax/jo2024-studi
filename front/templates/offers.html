@@ -1,0 +1,50 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block title %}Les offres{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/offers.css' %}">
+{% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/offers.js' %}"></script>
+{% endblock js %}
+
+{% block body %}
+
+<div class="container offers-container">
+    
+    <div class="intro">
+        <h1>Choisissez votre offre</h1>
+        <p>Que vous soyez seul, à deux ou en famille, nous aurons sûrement une offre qui correspondra à vos attentes.</p>
+    </div>
+
+    <div class="offers-list">
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="offers-row">
+            
+            {% for offer in offers  %}
+                <div class="col col-card" data-offer-id="{{ offer.id }}">
+                    <div class="card offer-edit h-100" style="width: 18rem;">
+                        <img src="{{ offer.image.url }}" class="card-img-top" alt="{{ offer.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ offer.title }}</h5>
+                            <p class="card-text">{{ offer.description }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="infos">
+                                <div class="places">{{ offer.places }} Billet{% if offer.places > 1 %}s{% endif %}</div>
+                                <div class="price">{{ offer.price }} €</div>
+                            </div>
+                            <a class="btn btn-outline-primary edit_btn" data-offer-id="{{ offer.id }}">Ajouter au panier</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+      
+</div>
+
+{% endblock body %}

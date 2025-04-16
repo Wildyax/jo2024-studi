@@ -1,0 +1,47 @@
+.offers-container {
+    max-width: 960px;
+    margin-bottom: 60px;
+
+    .offers-list {
+        margin: 40px 0;
+    
+        .offer-add {
+            
+            .image {
+                display: flex;
+                align-items: center;
+                height: 200px;
+                background-color: #dadada;
+                
+                img {
+                    height: 55%;
+                    object-fit: contain;
+                }
+            }
+        }
+
+        img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+                    line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+    }
+}
+
+.col-card {
+    display: flex;
+    justify-content: center;
+}
+
+span.required {
+    font-weight: bolder;
+    color: rgb(188, 75, 75);
+}

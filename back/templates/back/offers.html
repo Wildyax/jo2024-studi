@@ -1,0 +1,62 @@
+{% extends "back/common/base.html" %}
+{% load static %}
+
+{% block title %}Back Office{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/back-offers.css' %}">
+{% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/back-offers.js' %}"></script>
+{% endblock js %}
+
+{% block body %}
+
+<div class="container mt-5 offers-container">
+    <h2>Édition des offres</h2>
+
+    <div class="offers-list">
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="offers-row">
+            <div class="col col-card" id="add-card-col">
+                <div class="card offer-add" style="width: 18rem;">
+                    <div class="image">
+                        <img src="{% static 'img/add_symbol.png' %}" class="card-img-top" alt="Image du signe 'plus'">
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title">Ajouter une nouvelle offre</h5>
+                      <p class="card-text">Cliquez sur le bouton ci-dessous pour ajouter une nouvelle offre</p>
+                    </div>
+                    <div class="card-footer">
+                      <a class="btn btn-outline-success edit_btn" data-bs-toggle="modal" data-bs-target="#editOfferModal" data-offer-id="0">Ajouter</a>
+                    </div>
+                </div>
+            </div>
+            {% for offer in offers  %}
+                {% include "back/partials/offer_card.html" %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editOfferModal" tabindex="-1" aria-labelledby="editOfferModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editOfferModalLabel"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body" id="editOfferModalBody">
+        ...
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" id="save-offer-btn">Sauvegarder</button>
+    </div>
+    </div>
+</div>
+</div>
+  
+
+{% endblock body %}

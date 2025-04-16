@@ -1,9 +1,9 @@
-import random
-import string
+from .utils import generateUserKey
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from user.models import CustomUser
 from .forms import SubscribeForm, LoginForm
+from offer.models import Offer
 
 """
 Route de la page d'accueil : /
@@ -12,7 +12,14 @@ def index(request):
     return render(request, 'index.html', {})
 
 """
-Route de la page d'inscription / connexion : /subscribe
+Route de la page des offres : /offers
+"""
+def offers(request):
+    offers = Offer.objects.all()
+    return render(request, 'offers.html', {'offers': offers})
+
+"""
+Route de la page d'inscription || connexion : /subscribe
 """
 def subscribe(request):
     
@@ -56,9 +63,3 @@ Route pour la déconnexion : /logout
 def logOut(request):
     logout(request)
     return redirect("index")
-
-"""
-Génération de la première clé à l'inscription
-"""
-def generateUserKey(length: int):
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
