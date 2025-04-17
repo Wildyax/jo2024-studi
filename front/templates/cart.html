@@ -1,0 +1,68 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block title %}Panier{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/show_cart.css' %}">
+{% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/cart.js' %}"></script>
+<script src="{% static 'js/show_cart.js' %}"></script>
+{% endblock js %}
+
+{% block body %}
+
+<div class="container cart-container"> 
+    
+    {% if offer %}
+
+    <div class="empty-cart-box" style="display:none;">
+        <h2>Votre panier</h2>
+        <div>Votre panier est actuellement vide... </div>
+        <div>Consultez nos <a href="/offers">offres</a> pour acheter vos billets.</div>
+        <div class="spacer"></div>
+        <div class="total-infos">
+            <div class="total-offers">Nombre de billets : <span>0</span></div>
+            <div class="total-price">Prix total : <span>0 €</span></div>
+        </div>
+    </div>
+
+    <div class="cart-box">
+        <h2>Votre panier</h2>
+        <div class="cart-item" data-offer-id="{{ offer.id }}">
+            <span class="clear-offer">x</span>
+            <img src="{{ offer.image.url }}" alt="Image de l'offre">
+            <div class="item-infos">
+                <div class="offer-title">{{ offer.title }}</div>
+                <div class="offer-places">{{ offer.places }} billet{% if offer.places > 1 %}s{% endif %}</div>
+                <div class="offer-description">{{ offer.description }}</div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="total-infos">
+            <div class="total-offers">Nombre de billets : <span>{{ offer.places }}</span></div>
+            <div class="total-price">Prix total : <span>{{ offer.price }} € TTC</span></div>
+            {% if user.is_authenticated %}
+                <a href="/payment" class="btn btn-outline-primary payment-btn">Procéder au paiement</a>
+            {% else %}
+                <p>Vous devez vous <a href="/subscribe?form-name=subscribe">inscrire</a> ou vous <a href="/subscribe?form-name=login">connecter</a> avant de pouvoir procéder au paiement.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% else %}
+    <div class="empty-cart-box">
+        <div>Votre panier est vide... </div>
+        <div>Consultez nos <a href="/offers">offres</a> pour acheter vos billets.</div>
+        <div class="spacer"></div>
+        <div class="total-infos">
+            <div class="total-offers">Total places : <span>0</span></div>
+            <div class="total-price">Total prix : <span>0 €</span></div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock body %}

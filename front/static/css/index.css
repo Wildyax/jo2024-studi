@@ -19,6 +19,8 @@
             img {
                 width: 100%;
                 height: auto;
+                border-radius: 15px;
+                box-shadow: 0 0 3px #8b8b8b;
             }
     
             p{

@@ -1,0 +1,98 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block title %}Panier{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/payment.css' %}">
+{% endblock css %}
+
+{% block js %}
+<script src="{% static 'js/cart.js' %}"></script>
+{% endblock js %}
+
+{% block body %}
+
+<div class="container payment-container">
+
+    <h2>Récapitulatif commande</h2>
+
+    <div class="offer-recap-infos">
+        <img src="{{ offer.image.url }}" alt="Image de l'offer">
+        <div class="offer-infos">
+            <div class="text-infos">
+                <div class="offer-title">Offre {{ offer.title }}</div>
+                <div class="offer-description">{{ offer.description }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="payment-infos">
+        <div class="offer-places">Nombre de billets : <span>{{ offer.places}}</span></div>
+        <div class="offer-price">Prix total : <span>{{ offer.price }} € TTC</span></div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <h2>Paiement</h2>
+
+    <form method="POST" action="/payment" class="row g-3">
+
+        <h4>Adresse de facturation</h4>
+        <div class="col-12">
+          <label for="address" class="form-label">Adresse <span class="required">*</span></label>
+          <input type="text" class="form-control" id="address" name="address" placeholder="123 Rue bidon" required>
+        </div>
+        <div class="col-12">
+          <label for="address-2" class="form-label">Adresse 2 <span class="required">*</span></label>
+          <input type="text" class="form-control" id="address-2" name="address2" placeholder="Batiment, appartement, étage..." required>
+        </div>
+        <div class="col-md-5">
+          <label for="city" class="form-label">Ville <span class="required">*</span></label>
+          <input type="text" class="form-control" id="city" name="city" placeholder="Paris" required>
+        </div>
+        <div class="col-md-4">
+          <label for="state" class="form-label">Pays <span class="required">*</span></label>
+          <select id="state" class="form-select" name="state" required>
+            <option selected value="France">France</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="zip" class="form-label">Code Postal <span class="required">*</span></label>
+          <input type="text" class="form-control" id="zip" name="zip" placeholder="95000" required>
+        </div>
+
+        <div class="spacer"></div>
+
+        <h4>Informations de paiement</h4>
+        <div class="col-12">
+            <label for="card-code" class="form-label">Code <span class="required">*</span></label>
+            <input type="text" class="form-control" id="card-code" name="card-code" placeholder="1234 5678 9876 543" required>
+        </div>
+        <div class="col-md-3">
+            <label for="card-expire" class="form-label">Expire <span class="required">*</span></label>
+            <input type="text" class="form-control" id="card-expire" name="card-expire" placeholder="01/12" required>
+        </div>
+        <div class="col-md-3">
+            <label for="card-secure-code" class="form-label">Code de sécurité <span class="required">*</span></label>
+            <input type="text" class="form-control" id="card-secure-code" name="card-secure-code" placeholder="123" required>
+        </div>
+
+        <div class="col-12 mt-5">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="condition-check" name="condition-check" required>
+                <label class="form-check-label" for="condition-check">
+                    En validant ce paiement, je confirme avoir lu et accepté les <a href="#">CGV</a> ainsi que la <a href="#">politique de confidentialité</a>
+                    du site. <span class="required">*</span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="col-12 d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary px-5 mt-4 payment-submit">Valider le paiement</button>
+        </div>
+    </form>
+
+</div>
+
+{% endblock body %}

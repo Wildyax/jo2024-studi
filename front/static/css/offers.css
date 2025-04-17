@@ -10,7 +10,15 @@
     }
 
     .offers-list {
-        .card {
+        margin-bottom: 80px;
+        .col-card {
+            display: flex;
+            justify-content: center;
+
+            .card.selected {
+                border: 1px solid rgb(97, 186, 97);
+            }
+
             img {
                 height: 220px;
                 object-fit: cover;
@@ -25,6 +33,20 @@
                     flex-direction: row;
                     justify-content: space-between;
                     margin: 0 0 14px 0;
+                }
+
+                .cart {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 10px;
+
+                    .add-cart-btn {
+                        flex: 5;
+                    }
+
+                    .cart-qty {
+                        flex: 2;
+                    }
                 }
             }
         }

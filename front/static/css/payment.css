@@ -1,0 +1,63 @@
+.payment-container {
+    max-width: 700px;
+    margin-bottom: 100px;
+
+    h2 {
+        margin: 40px 0;
+    }
+
+    .spacer {
+        height: 1px;
+        background-color: #dfdfdf;
+        margin: 40px 0;
+    }
+
+    .offer-recap-infos {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+
+        img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .offer-infos {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .text-infos {
+
+                .offer-title {
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+    
+                .offer-description {
+                    font-size: 14px;
+                    max-width: 350px;
+                    text-align: justify;
+                }
+            }
+        }
+    }
+
+    .payment-infos {
+        text-align: end;
+        margin-top: 20px;
+
+        span {
+            font-weight: bold;
+        }
+    }
+
+    form {
+        span.required {
+            font-weight: bolder;
+            color: rgb(188, 75, 75);
+        }
+    }
+}

@@ -1,9 +1,13 @@
 from .utils import generateUserKey
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
+from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
+from .session_persist import persist_session_vars
 from user.models import CustomUser
-from .forms import SubscribeForm, LoginForm
 from offer.models import Offer
+from .forms import SubscribeForm, LoginForm
+from .cart import Cart
 
 """
 Route de la page d'accueil : /
@@ -21,6 +25,7 @@ def offers(request):
 """
 Route de la page d'inscription || connexion : /subscribe
 """
+@persist_session_vars(['cart'])
 def subscribe(request):
     
     if request.user.is_authenticated:
@@ -28,7 +33,8 @@ def subscribe(request):
     
     subscribe_form = SubscribeForm()
     login_form = LoginForm()
-    form_name = request.POST.get('form-name') if request.POST.get('form-name') else "" 
+    form_name = request.POST.get('form-name') if request.POST.get('form-name') else ""
+    form_name = request.GET.get('form-name') if  request.GET.get('form-name') else form_name
 
     if request.method == 'POST' and request.POST.get('form-name') == 'subscribe':
         subscribe_form = SubscribeForm(request.POST)
@@ -60,6 +66,48 @@ def subscribe(request):
 """
 Route pour la déconnexion : /logout
 """
+@persist_session_vars(['cart'])
 def logOut(request):
     logout(request)
     return redirect("index")
+
+"""
+Route vers la page de paiement : /payment
+"""
+def payment(request):
+    cart = Cart(request)
+
+    if not request.user.is_authenticated or not cart.getOffer():
+        return redirect('index.html')
+    
+    if request.method == 'POST':
+        pass
+    
+    return render(request, 'payment.html', {'offer': cart.getOffer()})
+
+"""
+Route pour ajouter au panier : /add-to-cart
+"""
+@require_http_methods(["GET"])
+def addToCart(request):
+    cart = Cart(request)
+    cart.add(request.GET.get('offer_id'))
+
+    return JsonResponse({'success': True, 'cart': cart.cart})
+
+"""
+Route pour vider le panier : /clear-cart
+"""
+@require_http_methods(["GET"])
+def clearCart(request):
+    cart = Cart(request)
+    cart.clear()
+   
+    return JsonResponse({'success': True})
+
+"""
+Route pour afficher le panier : /cart
+"""
+def showCart(request):
+    cart = Cart(request)    
+    return render(request, 'cart.html', {'offer': cart.getOffer()})

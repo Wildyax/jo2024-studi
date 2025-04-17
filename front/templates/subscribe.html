@@ -7,12 +7,7 @@
 <link rel="stylesheet" href="{% static 'css/subscribe.css' %}">
 {% endblock css %}
 
-{% block js %}
-<script src="{% static 'js/index.js' %}"></script>
-{% endblock js %}
-
 {% block body %}
-
 <div class="container subscribe-container">
     <ul class="nav nav-underline" id="tabs" role="tablist">
         <li class="nav-item" role="presentation">
@@ -52,8 +47,7 @@
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="policy-checkbox" required>
                         <label class="form-check-label" for="policy-checkbox">
-                            En vous inscrivant, vous reconnaissez avoir lu et accepté les <a href="#">CGV</a>
-                            ainsi que notre <a href="#">politique de confidentialité</a>.
+                            En vous inscrivant, vous reconnaissez avoir lu et accepté notre <a href="#">politique de confidentialité</a>.
                         </label>
                     </div>                    
                     <div class="d-grid gap-2 col-6 mx-auto mt-5">

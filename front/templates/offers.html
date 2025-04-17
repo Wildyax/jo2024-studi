@@ -8,6 +8,7 @@
 {% endblock css %}
 
 {% block js %}
+<script src="{% static 'js/cart.js' %}"></script>
 <script src="{% static 'js/offers.js' %}"></script>
 {% endblock js %}
 
@@ -24,8 +25,8 @@
         <div class="row row-cols-1 row-cols-md-3 g-4" id="offers-row">
             
             {% for offer in offers  %}
-                <div class="col col-card" data-offer-id="{{ offer.id }}">
-                    <div class="card offer-edit h-100" style="width: 18rem;">
+                <div class="col col-card">
+                    <div class="card h-100 {% if offer.id == request.session.cart.offer|add:"0" %}selected{% endif %}" style="width: 18rem;" data-offer-id="{{ offer.id }}">
                         <img src="{{ offer.image.url }}" class="card-img-top" alt="{{ offer.title }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ offer.title }}</h5>
@@ -36,7 +37,10 @@
                                 <div class="places">{{ offer.places }} Billet{% if offer.places > 1 %}s{% endif %}</div>
                                 <div class="price">{{ offer.price }} €</div>
                             </div>
-                            <a class="btn btn-outline-primary edit_btn" data-offer-id="{{ offer.id }}">Ajouter au panier</a>
+                            <div class="cart">
+                                <button type="button" class="{% if offer.id == request.session.cart.offer|add:"0" %}btn-outline-success disabled{% else %}btn-outline-primary{% endif %} btn add-cart-btn" 
+                                data-offer-id="{{ offer.id }}" {% if offer.id == request.session.cart.offer|add:"0" %}disabled{% endif %}>Choisir cette offre</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -44,7 +48,6 @@
             
         </div>
     </div>
-      
 </div>
 
 {% endblock body %}
