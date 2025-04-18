@@ -1,7 +1,7 @@
 {% extends "common/base.html" %}
 {% load static %}
 
-{% block title %}Panier{% endblock title %}
+{% block title %}Paiement{% endblock title %}
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/payment.css' %}">
@@ -18,7 +18,7 @@
     <h2>Récapitulatif commande</h2>
 
     <div class="offer-recap-infos">
-        <img src="{{ offer.image.url }}" alt="Image de l'offer">
+        <img src="{{ offer.image.url }}" alt="Image de l'offre">
         <div class="offer-infos">
             <div class="text-infos">
                 <div class="offer-title">Offre {{ offer.title }}</div>
@@ -36,47 +36,35 @@
 
     <h2>Paiement</h2>
 
-    <form method="POST" action="/payment" class="row g-3">
+    <form action="/payment" method="POST" class="row g-3">
 
-        <h4>Adresse de facturation</h4>
-        <div class="col-12">
-          <label for="address" class="form-label">Adresse <span class="required">*</span></label>
-          <input type="text" class="form-control" id="address" name="address" placeholder="123 Rue bidon" required>
-        </div>
-        <div class="col-12">
-          <label for="address-2" class="form-label">Adresse 2 <span class="required">*</span></label>
-          <input type="text" class="form-control" id="address-2" name="address2" placeholder="Batiment, appartement, étage..." required>
-        </div>
-        <div class="col-md-5">
-          <label for="city" class="form-label">Ville <span class="required">*</span></label>
-          <input type="text" class="form-control" id="city" name="city" placeholder="Paris" required>
-        </div>
-        <div class="col-md-4">
-          <label for="state" class="form-label">Pays <span class="required">*</span></label>
-          <select id="state" class="form-select" name="state" required>
-            <option selected value="France">France</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label for="zip" class="form-label">Code Postal <span class="required">*</span></label>
-          <input type="text" class="form-control" id="zip" name="zip" placeholder="95000" required>
-        </div>
+      {% csrf_token %}
 
-        <div class="spacer"></div>
-
-        <h4>Informations de paiement</h4>
-        <div class="col-12">
-            <label for="card-code" class="form-label">Code <span class="required">*</span></label>
-            <input type="text" class="form-control" id="card-code" name="card-code" placeholder="1234 5678 9876 543" required>
+      <h4>Informations de paiement</h4>
+      {% for field in payment_form %}
+          
+        <div class="{% if field.html_name == 'code' %}col-12{% else %}col-md-3{% endif %}"> 
+              
+          <label for="{{ field.id_for_label }}" class="form-label">
+          {{ field.label }} {% if field.field.required %}<span class="required">*</span>{% endif %}
+          </label>
+  
+          {{ field }}
+  
+          {% if field.help_text %}
+          <div class="form-text">
+              {{ field.help_text }}
+          </div>
+          {% endif %}
+  
+          {% for error in field.errors %}
+          <div class="text-danger">
+              {{ error }}
+          </div>
+          {% endfor %}
+        
         </div>
-        <div class="col-md-3">
-            <label for="card-expire" class="form-label">Expire <span class="required">*</span></label>
-            <input type="text" class="form-control" id="card-expire" name="card-expire" placeholder="01/12" required>
-        </div>
-        <div class="col-md-3">
-            <label for="card-secure-code" class="form-label">Code de sécurité <span class="required">*</span></label>
-            <input type="text" class="form-control" id="card-secure-code" name="card-secure-code" placeholder="123" required>
-        </div>
+      {% endfor %}
 
         <div class="col-12 mt-5">
             <div class="form-check">
@@ -87,11 +75,12 @@
                 </label>
             </div>
         </div>
-        
+          
         <div class="col-12 d-flex justify-content-end">
           <button type="submit" class="btn btn-primary px-5 mt-4 payment-submit">Valider le paiement</button>
         </div>
-    </form>
+
+      </form>
 
 </div>
 

@@ -1,12 +1,14 @@
-from .utils import generateUserKey
+from .utils import generateUserKey, generateQrCode, renderPdf
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.http import require_http_methods
-from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.http import JsonResponse, HttpResponse
 from .session_persist import persist_session_vars
 from user.models import CustomUser
 from offer.models import Offer
-from .forms import SubscribeForm, LoginForm
+from order.models import Order
+from .forms import SubscribeForm, LoginForm, PaymentForm
 from .cart import Cart
 
 """
@@ -76,14 +78,59 @@ Route vers la page de paiement : /payment
 """
 def payment(request):
     cart = Cart(request)
+    payment_form = PaymentForm()
 
     if not request.user.is_authenticated or not cart.getOffer():
-        return redirect('index.html')
+        return redirect('index')
     
     if request.method == 'POST':
-        pass
+        payment_form = PaymentForm(request.POST)
+
+        if payment_form.is_valid():
+            order = Order.objects.create(
+                user = request.user,
+                offer = cart.getOffer(),
+                orderkey = generateUserKey(16)
+            )
+
+            cart.clear()
+     
+            return redirect("order-confirm", order_id=str(order.id))
     
-    return render(request, 'payment.html', {'offer': cart.getOffer()})
+    return render(request, 'payment.html', {'offer': cart.getOffer(), 'payment_form': payment_form})
+
+"""
+Route de la page de confirmation de commande : /order-confirm
+"""
+def orderConfirm(request, order_id):
+
+    if not order_id:
+        return redirect('index')
+
+    order = Order.objects.get(id=order_id)
+    if not request.user.is_authenticated or order.user != request.user:
+        return redirect('index')
+
+    return render(request, 'order-confirm.html', {'order': order})
+
+"""
+Route pour générer les billets : /generate-ticket
+"""
+def generateTicket(request, order_id):
+
+    if not order_id:
+        return redirect('index')
+    order = Order.objects.get(id=order_id)
+
+    if not request.user.is_authenticated or order.user != request.user:
+        return redirect('index')
+    
+    qr_data = f"{request.user.userkey}:{order.orderkey}"
+    qr_code_b64 = generateQrCode(qr_data)
+
+    pdf = renderPdf('ticket.html', {'order': order, 'qr_code': qr_code_b64})
+
+    return HttpResponse(pdf, content_type='application/pdf')
 
 """
 Route pour ajouter au panier : /add-to-cart

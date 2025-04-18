@@ -15,7 +15,7 @@
                 <a class="nav-link {% if request.get_full_path == '/back-office/offers' %}active{% endif %}" href="/back-office/offers">Offres</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Ventes</a>
+                <a class="nav-link {% if request.get_full_path == '/back-office/orders' %}active{% endif %}" href="/back-office/orders">Ventes</a>
             </li>
         </ul>  
         </div>

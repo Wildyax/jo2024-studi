@@ -45,7 +45,6 @@ class SubscribeForm(forms.Form):
         
         return no_error
 
-    
 
 class LoginForm(forms.Form):
     email = forms.EmailField(
@@ -56,3 +55,18 @@ class LoginForm(forms.Form):
         label="Mot de passe",
         required=True,
         widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    
+
+class PaymentForm(forms.Form):
+    code = forms.CharField(
+        label="Code carte",
+        required=True,
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "1234 5678 9876 5432"}))
+    expire = forms.CharField(
+        label="Expire",
+        required=True,
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "01/12"}))
+    security_code = forms.CharField(
+        label="Code sécurité",
+        required=True,
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "123"}))

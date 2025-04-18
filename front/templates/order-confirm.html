@@ -1,0 +1,48 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block title %}Confirmation de commande{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/order-confirm.css' %}">
+{% endblock css %}
+
+{% block js %}{% endblock js %}
+
+{% block body %}
+
+<div class="container order-confirm-container">
+
+    <h2>Confirmation d'achat</h2>
+
+    <div class="offer-recap-infos">
+        <img src="{{ order.offer.image.url }}" alt="Image de l'offer">
+        <div class="offer-infos">
+            <div class="text-infos">
+                <div class="offer-title">Offre {{ order.offer.title }}</div>
+                <div class="offer-description">{{ order.offer.description }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="payment-infos">
+        <div class="offer-places">Nombre de billets : <span>{{ order.offer.places}}</span></div>
+        <div class="offer-price">Prix total : <span>{{ order.offer.price }} € TTC</span></div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <h2>Vos billets</h2>
+
+    <div>
+        Merci pour votre achat !
+        Vous pouvez dès à présent télécharger vos billets au format PDF.
+        Ces billets seront à présenter le jour de votre venue aux Jeux Olympiques, conservez les précieusement.
+    </div>
+    <div class="download-box mt-4">
+        <a href="/generate-ticket/{{ order.id }}/" target="_blank" class="download-link">Télécharger mes billets</a>
+    </div>
+
+</div>
+
+{% endblock body %}

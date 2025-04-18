@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'back.apps.BackConfig',
     'offer.apps.OfferConfig',
+    'order.apps.OrderConfig',
     'django_cleanup.apps.CleanupConfig', # Need to be after other apps
 ]
 

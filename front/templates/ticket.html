@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .ticket {
+            border: 1px solid #000;
+            padding: 20px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .info {
+            margin-top: 20px;
+        }
+
+        .info p {
+            margin: 0;
+        }
+
+        .qr {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .qr p {
+            margin: 0;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+    </style>
+</head>
+<body>
+
+    {% with ''|ljust:order.offer.places as range %} 
+        {% for _ in range %}
+            <div class="ticket">
+                <h1>Billet - Jeux Olympiques 2024</h1>
+
+                <div class="info">
+                    <p><strong>Nom :</strong> {{ order.user.last_name }} {{ order.user.first_name }}</p>
+                    <p><strong>Offre :</strong> {{ order.offer.title }}</p>
+                    <p><strong>Date de commande :</strong> {{ order.date|date:"d/m/Y H:i" }}</p>
+                </div>
+
+                <div class="qr">
+                    <img src="data:image/png;base64,{{ qr_code }}" width="150" height="150" />
+                    <p><strong>Billet :</strong> {{ forloop.counter }} / {{ order.offer.places }}</p>
+                </div>
+            </div>
+    
+            <div class="page-break"></div>
+        {% endfor %}
+    {% endwith %}
+</body>
+</html>

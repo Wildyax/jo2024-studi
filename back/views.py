@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseNotAllowed, HttpResponse, JsonResponse
+from django.db.models import Count, F, FloatField, ExpressionWrapper
 from django.template.loader import render_to_string
 from .forms import LoginForm
 from offer.models import Offer
@@ -41,6 +42,20 @@ def offers(request):
         return render(request, 'back/offers.html', {'offers': offers_list})
     
     return HttpResponseNotAllowed()
+
+"""
+Route de la page pour voir les ventes par offres : back-office/orders
+"""
+def orders(request):
+    offers = Offer.objects.annotate(
+        sell=Count('order'),
+        total_income=ExpressionWrapper(
+            F('price') * Count('order'),
+            output_field=FloatField()
+        )
+    )
+    
+    return render(request, 'back/orders.html', {'offers': offers})
 
 """
 Route Ajax du formulaire d'édition des offres : back-office/offers/edit
