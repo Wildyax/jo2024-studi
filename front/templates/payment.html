@@ -70,8 +70,8 @@
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="condition-check" name="condition-check" required>
                 <label class="form-check-label" for="condition-check">
-                    En validant ce paiement, je confirme avoir lu et accepté les <a href="#">CGV</a> ainsi que la <a href="#">politique de confidentialité</a>
-                    du site. <span class="required">*</span>
+                    En validant ce paiement, je confirme avoir lu et accepté les <a href="#" data-bs-toggle="modal" data-bs-target="#cgvModal">CGV</a> ainsi que la 
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#confidentialityModal">politique de confidentialité</a> du site. <span class="required">*</span>
                 </label>
             </div>
         </div>
@@ -82,6 +82,42 @@
 
       </form>
 
+</div>
+
+{% comment %} CGV Modal {% endcomment %}
+<div class="modal fade modal-lg" id="cgvModal" tabindex="-1" aria-labelledby="cgvModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="cgvModalLabel">Conditions Générales de Vente</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            {% include "common/cgv.html" %}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% comment %} Confidentiality Modal {% endcomment %}
+<div class="modal fade modal-lg" id="confidentialityModal" tabindex="-1" aria-labelledby="confidentialityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="confidentialityModalLabel">Politique de Confidentialité</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            {% include "common/confidentiality.html" %}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
 </div>
 
 {% endblock body %}

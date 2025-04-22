@@ -1,4 +1,5 @@
 from django import forms
+import re
 
 
 class SubscribeForm(forms.Form):
@@ -19,31 +20,21 @@ class SubscribeForm(forms.Form):
         widget=forms.EmailInput(attrs={"class": "form-control"}))
     password = forms.CharField(
         label="Mot de passe",
-        max_length=20,
+        max_length=128,
         min_length=8,
         required=True,
-        help_text="Votre mot de passe doit être compris entre 8 et 20 caractères, ne pas avoir d'espaces et contenir au moins un chiffre.",
-        widget=forms.PasswordInput(attrs={"class": "form-control", "pattern": "^(?=\S{8,20}$)(?=.*\d).*$"}))
+        help_text="Votre mot de passe doit contenir au moins 8 caractères, une lettre majuscule, un chiffre, et ne doit pas contenir d'espaces.",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}))
     
-    def checkForm(self):
-        if not self.checkPassword:
-            return False
-        return True
+    def clean_password(self):
+        password = self.cleaned_data.get("password")
+        pattern = r'^(?=.*[A-Z])(?=.*\d)[^\s]{8,}$'
 
-    def checkPassword(self, password: str):
-        no_error = True
-        
-        if len(password) < 8 or len(password) > 20:
-            self.add_error('password', 'Le mot de passe doit être compris entre 8 et 20 caractères')
-            no_error = False
-        if not any(char.isdigit() for char in password):
-            self.add_error('password', 'Le mot de passe doit contenir un chiffre')
-            no_error = False
-        if password.count(' ') > 0:
-             self.add_error('password', 'Le mot de passe ne doit pas contenir d\'espaces')
-             no_error = False
-        
-        return no_error
+        if not re.match(pattern, password):
+            raise forms.ValidationError(
+                "Votre mot de passe doit contenir au moins 8 caractères, une lettre majuscule, un chiffre, et ne doit pas contenir d'espaces."
+            )
+        return password
 
 
 class LoginForm(forms.Form):

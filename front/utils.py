@@ -10,13 +10,13 @@ from django.template.loader import get_template
 """
 Génération des clés de sécurité
 """
-def generateUserKey(length: int):
+def generate_secure_key(length: int):
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
 
 """
 Fonction pour générer le QrCode
 """
-def generateQrCode(data):
+def generate_qr_code(data):
     qr = qrcode.QRCode(version=1, box_size=10, border=4)
     qr.add_data(data)
     qr.make(fit=True)
@@ -30,7 +30,7 @@ def generateQrCode(data):
 """
 Fonction pour générer le PDF
 """
-def renderPdf(template_src, context_dict={}):
+def render_pdf(template_src, context_dict={}):
     template = get_template(template_src)
     html  = template.render(context_dict)
     result = BytesIO()

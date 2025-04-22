@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="{% static 'css/subscribe.css' %}">
 {% endblock css %}
 
+{% block js %}
+<script src="{% static 'js/subscribe.js' %}"></script>
+{% endblock js %}
+
 {% block body %}
 <div class="container subscribe-container">
     <ul class="nav nav-underline" id="tabs" role="tablist">
@@ -47,11 +51,11 @@
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="policy-checkbox" required>
                         <label class="form-check-label" for="policy-checkbox">
-                            En vous inscrivant, vous reconnaissez avoir lu et accepté notre <a href="#">politique de confidentialité</a>.
+                            En vous inscrivant, vous reconnaissez avoir lu et accepté notre <a href="#" data-bs-toggle="modal" data-bs-target="#confidentialityModal">politique de confidentialité</a>.
                         </label>
                     </div>                    
                     <div class="d-grid gap-2 col-6 mx-auto mt-5">
-                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                        <button type="submit" class="btn btn-primary submit-btn">S'inscrire</button>
                     </div>
                 </form>
             </div>
@@ -92,4 +96,22 @@
       
 </div>
 
+{% comment %} Confidentiality Modal {% endcomment %}
+<div class="modal fade modal-lg" id="confidentialityModal" tabindex="-1" aria-labelledby="confidentialityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="confidentialityModalLabel">Politique de Confidentialité</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            {% include "common/confidentiality.html" %}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+</div>
+  
 {% endblock body %}

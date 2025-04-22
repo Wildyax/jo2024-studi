@@ -1,0 +1,60 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block title %}Mon Compte{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+{% endblock css %}
+
+{% block body %}
+
+<div class="container account-container mt-4">
+    
+    <h1>Mon compte</h1>
+
+    <ul class="nav nav-tabs mt-5" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" aria-selected="true" id="ticket-tab" data-bs-toggle="tab" data-bs-target="#ticket-tab-pane" type="button" role="tab" aria-controls="ticket-tab-pane" aria-selected="false">Mes billets</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="ticket-tab-pane" role="tabpanel" aria-labelledby="ticket-tab" tabindex="0">
+          <div style="overflow: auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Offre</th>
+                  <th scope="col" class="desktop">Image</th>
+                  <th scope="col">Places</th>
+                  <th scope="col">Prix</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Billets</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for order in orders %}
+                <tr>
+                  <th scope="row">{{ order.offer.title }}</th>
+                  <td class="desktop"><img src="{{ order.offer.image.url }}" alt="Image de l'offre" /></td>
+                  <td>{{ order.offer.places }}</td>
+                  <td>{{ order.offer.price }}&nbsp;€</td>
+                  <td>{{ order.date|date:"d/m/Y" }}</td>
+                  <td><a href="/generate-ticket/{{ order.id }}/" target="_blank" class="download-link">Consulter mes billets</a></td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="6">Vous n'avez passé aucune commande.</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+          </div>
+
+        </div>
+    </div>
+      
+      
+</div>
+
+{% endblock body %}

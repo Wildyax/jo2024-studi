@@ -1,4 +1,4 @@
-from .utils import generateUserKey, generateQrCode, renderPdf
+from .utils import generate_secure_key, generate_qr_code, render_pdf
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.http import require_http_methods
@@ -12,20 +12,20 @@ from .forms import SubscribeForm, LoginForm, PaymentForm
 from .cart import Cart
 
 """
-Route de la page d'accueil : /
+Home page route : /
 """
 def index(request):
     return render(request, 'index.html', {})
 
 """
-Route de la page des offres : /offers
+Offers page route : /offers
 """
 def offers(request):
     offers = Offer.objects.all()
     return render(request, 'offers.html', {'offers': offers})
 
 """
-Route de la page d'inscription || connexion : /subscribe
+Subscribe / Login page route : /subscribe
 """
 @persist_session_vars(['cart'])
 def subscribe(request):
@@ -40,16 +40,16 @@ def subscribe(request):
 
     if request.method == 'POST' and request.POST.get('form-name') == 'subscribe':
         subscribe_form = SubscribeForm(request.POST)
-        if subscribe_form.is_valid() and subscribe_form.checkForm():
+        if subscribe_form.is_valid():
             user = CustomUser.objects.create_user(
                 email=subscribe_form.cleaned_data["email"],
                 password=subscribe_form.cleaned_data["password"],
                 last_name=subscribe_form.cleaned_data["name"],
                 first_name=subscribe_form.cleaned_data["first_name"],
-                userkey=generateUserKey(16),
+                userkey=generate_secure_key(16),
             )
             login(request, user)
-            return redirect("index")
+            return redirect("payment")
     
     elif request.method == 'POST' and request.POST.get('form-name') == 'login':
         login_form = LoginForm(request.POST)
@@ -59,30 +59,29 @@ def subscribe(request):
                 login(request, user)
                 return redirect("index")
             else:
-                login_form.add_error("password", "Le mail n'existe pas ou le mot de passe est incorrect")
+                login_form.add_error("password", "L'utilisateur n'existe pas ou le mot de passe est incorrect")
         else:
-            login_form.add_error("password", "Le mail n'existe pas ou le mot de passe est incorrect")
+            login_form.add_error("password", "L'utilisateur n'existe pas ou le mot de passe est incorrect")
 
     return render(request, 'subscribe.html', {"subscribe_form": subscribe_form, "login_form": login_form, "form_name": form_name})
 
 """
-Route pour la déconnexion : /logout
+Logout route : /logout
 """
 @persist_session_vars(['cart'])
-def logOut(request):
+def log_out(request):
     logout(request)
     return redirect("index")
 
 """
-Route vers la page de paiement : /payment
+Payment page route : /payment
 """
 def payment(request):
     cart = Cart(request)
-    payment_form = PaymentForm()
-
     if not request.user.is_authenticated or not cart.getOffer():
         return redirect('index')
     
+    payment_form = PaymentForm()
     if request.method == 'POST':
         payment_form = PaymentForm(request.POST)
 
@@ -90,20 +89,19 @@ def payment(request):
             order = Order.objects.create(
                 user = request.user,
                 offer = cart.getOffer(),
-                orderkey = generateUserKey(16)
+                orderkey = generate_secure_key(16)
             )
 
             cart.clear()
      
-            return redirect("order-confirm", order_id=str(order.id))
+            return redirect("order_confirm", order_id=str(order.id))
     
     return render(request, 'payment.html', {'offer': cart.getOffer(), 'payment_form': payment_form})
 
 """
-Route de la page de confirmation de commande : /order-confirm
+Order confirm page route : /order-confirm
 """
-def orderConfirm(request, order_id):
-
+def order_confirm(request, order_id):
     if not order_id:
         return redirect('index')
 
@@ -114,10 +112,9 @@ def orderConfirm(request, order_id):
     return render(request, 'order-confirm.html', {'order': order})
 
 """
-Route pour générer les billets : /generate-ticket
+Ticket generation route : /generate-ticket
 """
-def generateTicket(request, order_id):
-
+def generate_ticket(request, order_id):
     if not order_id:
         return redirect('index')
     order = Order.objects.get(id=order_id)
@@ -126,35 +123,46 @@ def generateTicket(request, order_id):
         return redirect('index')
     
     qr_data = f"{request.user.userkey}:{order.orderkey}"
-    qr_code_b64 = generateQrCode(qr_data)
+    qr_code_b64 = generate_qr_code(qr_data)
 
-    pdf = renderPdf('ticket.html', {'order': order, 'qr_code': qr_code_b64})
+    pdf = render_pdf('ticket.html', {'order': order, 'qr_code': qr_code_b64})
 
     return HttpResponse(pdf, content_type='application/pdf')
 
 """
-Route pour ajouter au panier : /add-to-cart
+Account page route : /account
+"""
+def account(request):
+    if not request.user.is_authenticated:
+        return redirect('index')
+    
+    orders = Order.objects.filter(user=request.user)
+    
+    return render(request, 'account.html', {'orders': orders})
+
+"""
+Ajax add to cart route : /add-to-cart
 """
 @require_http_methods(["GET"])
-def addToCart(request):
+def add_to_cart(request):
     cart = Cart(request)
     cart.add(request.GET.get('offer_id'))
 
     return JsonResponse({'success': True, 'cart': cart.cart})
 
 """
-Route pour vider le panier : /clear-cart
+Ajax clear cart route : /clear-cart
 """
 @require_http_methods(["GET"])
-def clearCart(request):
+def clear_cart(request):
     cart = Cart(request)
     cart.clear()
    
     return JsonResponse({'success': True})
 
 """
-Route pour afficher le panier : /cart
+Cart page route : /cart
 """
-def showCart(request):
+def show_cart(request):
     cart = Cart(request)    
     return render(request, 'cart.html', {'offer': cart.getOffer()})

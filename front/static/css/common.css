@@ -13,11 +13,16 @@ html {
         margin: 0 10px;
     }
 
-    .nav-cart {
+    .nav-cart, .nav-account {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
         text-decoration: none;
         color: white;
         background-color: #515151;
         padding: 8px;
+        margin: 0 8px;
         border-radius: 10px;
         transition: background-color .2s;
         position: relative;
@@ -73,8 +78,8 @@ html {
             padding-bottom: 10px;
         }
 
-        .nav-cart {
-            margin: 0 0 0 5px;
+        .nav-cart, .nav-account {
+            margin: 15px 5px 0 5px;
         }
     }
 }

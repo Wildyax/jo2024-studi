@@ -13,7 +13,7 @@ from offer.forms import OfferForm
 """
 Route de la page d'accueil du Back-Office : back-office/
 """
-def backOffice(request):
+def back_office(request):
     login_form = LoginForm()
 
     if request.user.is_authenticated and request.user.is_staff:
@@ -61,7 +61,7 @@ def orders(request):
 Route Ajax du formulaire d'édition des offres : back-office/offers/edit
 """
 @require_http_methods(["GET"])
-def editOffer(request):
+def edit_offer(request):
     if request.user.is_authenticated and request.user.is_staff:
         offer_id = request.GET.get('offer-id')
         offer_form = OfferForm()
@@ -81,7 +81,7 @@ def editOffer(request):
 Route Ajax de la sauvegarde du formulaire d'édition des offres : back-office/offers/edit
 """
 @require_http_methods(["POST"])
-def saveOffer(request):
+def save_offer(request):
     if request.user.is_authenticated and request.user.is_staff:
         offer_id = request.POST.get('offer-id')
 
@@ -104,6 +104,7 @@ def saveOffer(request):
                 offer_card = render_to_string('back/partials/offer_card.html', {'offer': offer}, request)
                 return JsonResponse({'success': True, 'card_html': offer_card, 'offer_id': offer.id, 'new': False})
             else:
+                print(offer_form.errors)
                 return JsonResponse({'success': False})
 
     return HttpResponseNotAllowed()
@@ -112,7 +113,7 @@ def saveOffer(request):
 Route Ajax de la suppression d'une offre : back-office/offers/delete
 """
 @require_http_methods(["GET"])
-def deleteOffer(request):
+def delete_offer(request):
     if request.user.is_authenticated and request.user.is_staff:
         offer_id = request.GET.get('offer-id')
         offer_instance = get_object_or_404(Offer, id=offer_id)

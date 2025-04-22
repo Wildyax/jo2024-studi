@@ -8,4 +8,9 @@
     box-shadow: 0 0 5px rgb(171, 171, 171);
     border-radius: 30px;
     padding: 50px;
+
+    span.required {
+        font-weight: bolder;
+        color: rgb(188, 75, 75);
+    }    
 }
