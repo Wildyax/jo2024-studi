@@ -45,7 +45,7 @@
             <div class="total-offers">Nombre de billets : <span>{{ offer.places }}</span></div>
             <div class="total-price">Prix total : <span>{{ offer.price }} € TTC</span></div>
             {% if user.is_authenticated %}
-                <a href="/payment" class="btn btn-outline-primary payment-btn">Procéder au paiement</a>
+                <a href="/payment" class="btn btn-outline-primary payment-btn">Valider mon panier</a>
             {% else %}
                 <p>Vous devez vous <a href="/subscribe?form-name=subscribe">inscrire</a> ou vous <a href="/subscribe?form-name=login">connecter</a> avant de pouvoir procéder au paiement.</p>
             {% endif %}

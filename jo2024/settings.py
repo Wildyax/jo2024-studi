@@ -12,22 +12,31 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Declare environment variable
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g1q*fk%-1x)s6)jht%fz%%n+xty_pt(bvle1c9+xkl#f@0sbf!'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+DOMAIN_URL = env('DOMAIN_URL')
 
+# Stripe
+PUBLIC_STRIPE_KEY = env('PUBLIC_STRIPE_KEY')
+PRIVATE_STRIPE_KEY = env('PRIVATE_STRIPE_KEY')
 
 # Application definition
 
@@ -82,11 +91,11 @@ WSGI_APPLICATION = 'jo2024.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'jo2024',
-        'USER': 'alex',
-        'PASSWORD': 'd9133gY8ZDawFUFz',
-        'HOST':'localhost',
-        'PORT':'5432',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASS'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 

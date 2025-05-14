@@ -1,6 +1,9 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
 import base64
 
+"""
+Fonction pour générer une image de test
+"""
 def get_test_image():
     return SimpleUploadedFile(
         name='test.jpg',

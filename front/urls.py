@@ -16,4 +16,9 @@ urlpatterns = [
     path('add-to-cart', views.add_to_cart, name='add_to_cart'),
     path('clear-cart', views.clear_cart, name='clear_cart'),
     path('cart', views.show_cart, name='show_cart'),
+
+    # Stripe route
+    path('create-checkout-session', views.create_checkout_session, name='create_checkout_session'),
+    path('success-checkout-session', views.success_checkout_session, name='success_checkout_session'),
+    path('order-fail', views.order_fail, name='order_fail')
 ]

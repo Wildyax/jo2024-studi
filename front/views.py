@@ -2,7 +2,7 @@ from .utils import generate_secure_key, generate_qr_code, render_pdf
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.http import require_http_methods
-from django.template.loader import render_to_string
+from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from .session_persist import persist_session_vars
 from user.models import CustomUser
@@ -10,6 +10,8 @@ from offer.models import Offer
 from order.models import Order
 from .forms import SubscribeForm, LoginForm, PaymentForm
 from .cart import Cart
+
+import stripe
 
 """
 Home page route : /
@@ -81,22 +83,7 @@ def payment(request):
     if not request.user.is_authenticated or not cart.getOffer():
         return redirect('index')
     
-    payment_form = PaymentForm()
-    if request.method == 'POST':
-        payment_form = PaymentForm(request.POST)
-
-        if payment_form.is_valid():
-            order = Order.objects.create(
-                user = request.user,
-                offer = cart.getOffer(),
-                orderkey = generate_secure_key(16)
-            )
-
-            cart.clear()
-     
-            return redirect("order_confirm", order_id=str(order.id))
-    
-    return render(request, 'payment.html', {'offer': cart.getOffer(), 'payment_form': payment_form})
+    return render(request, 'payment.html', {'offer': cart.getOffer()})
 
 """
 Order confirm page route : /order-confirm
@@ -110,6 +97,9 @@ def order_confirm(request, order_id):
         return redirect('index')
 
     return render(request, 'order-confirm.html', {'order': order})
+
+def order_fail(request):
+    return render(request, 'order-fail.html')
 
 """
 Ticket generation route : /generate-ticket
@@ -166,3 +156,62 @@ Cart page route : /cart
 def show_cart(request):
     cart = Cart(request)    
     return render(request, 'cart.html', {'offer': cart.getOffer()})
+
+"""
+Stripe checkout url
+"""
+def create_checkout_session(request):
+    cart = Cart(request)
+    if not cart.getOffer():
+        return redirect('index')
+    
+    stripe.api_key = settings.PRIVATE_STRIPE_KEY
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[
+            {
+                'price_data': {
+                    'currency': 'eur',
+                    'product_data': {
+                        'name': 'Offre ' + cart.getOffer().title,
+                        'description': cart.getOffer().description,
+                    },
+                    'unit_amount': str(cart.getOffer().price).replace('.', '')
+                },
+                'quantity': 1
+            }
+        ],
+        mode='payment',
+        success_url=settings.DOMAIN_URL + '/success-checkout-session?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url=settings.DOMAIN_URL + '/order-fail'
+    )
+
+    return redirect(checkout_session.url)
+
+"""
+Stripe success payment page
+"""
+def success_checkout_session(request):
+    session_id = request.GET.get('session_id')
+    cart = Cart(request)
+    if not session_id or not cart.getOffer():
+        return redirect('index')
+    
+    stripe.api_key = settings.PRIVATE_STRIPE_KEY
+    session = stripe.checkout.Session.retrieve(session_id)
+
+    if session.payment_status == 'paid':
+        existing_order = Order.objects.filter(stripe_session_id=session_id).first()
+        if existing_order:
+            return redirect('order_confirm', order_id=str(existing_order.id))
+        
+        order = Order.objects.create(
+            user = request.user,
+            offer = cart.getOffer(),
+            orderkey = generate_secure_key(16),
+            stripe_session_id = session_id
+        )
+
+        cart.clear()
+        return redirect('order_confirm', order_id=str(order.id))
+    
+    return redirect('order_fail')

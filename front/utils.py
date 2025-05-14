@@ -6,6 +6,8 @@ from io import BytesIO
 from xhtml2pdf import pisa   
 from django.http import HttpResponse
 from django.template.loader import get_template
+from django.core.files.uploadedfile import SimpleUploadedFile
+import base64
 
 """
 Génération des clés de sécurité
@@ -39,3 +41,13 @@ def render_pdf(template_src, context_dict={}):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
+
+"""
+Fonction pour générer une image de test
+"""
+def get_test_image():
+    return SimpleUploadedFile(
+        name='test.jpg',
+        content=base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="),
+        content_type='image/jpeg'
+    )
